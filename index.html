@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多角形描画ツール</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>多角形描画ツール</h1>
+  <label for="vertices">頂点の数を入力してください:</label>
+  <input type="number" id="vertices">
+  <button onclick="drawPolygon()">描画</button>
+  <button onclick="resetCanvas()">リセット</button>
+  <br><br>
+  <canvas id="canvas" width="400" height="400"></canvas>
+
+  <script>
+    function drawPolygon() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const vertices = parseInt(document.getElementById('vertices').value);
+      
+      if (vertices < 3) {
+        alert('頂点の数は3以上である必要があります');
+        return;
+      }
+      
+      const centerX = 200;
+      const centerY = 200;
+      const radius = 150;
+      const angleIncrement = (2 * Math.PI) / vertices;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      for (let i = 0; i < vertices; i++) {
+        const x = centerX + radius * Math.cos(i * angleIncrement);
+        const y = centerY + radius * Math.sin(i * angleIncrement);
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    function resetCanvas() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const verticesInput = document.getElementById('vertices');
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      verticesInput.value = '';
+    }
+  </script>
+</body>
